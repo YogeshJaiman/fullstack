@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>AGNE Customer Email Maintenance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --brand: #b43333;
+      --brand-hover: #9c2b2b;
+      --bg: #f8fafc;
+      --text: #0f172a;
+      --muted: #64748b;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --focus-ring: rgba(180, 51, 51, 0.15);
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--brand), #8d2727);
+      color: #fff;
+      padding: 16px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(180, 51, 51, 0.2);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      height: 40px;
+      width: 85px;
+      object-fit: cover;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .logout-btn {
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .logout-btn:hover {
+      opacity: 1;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 36px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 32px;
+      box-shadow:
+        0 10px 30px -5px rgba(0, 0, 0, 0.05),
+        0 1px 3px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .refresh-btn {
+      background: #f1f5f9;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .refresh-btn:hover {
+      background: #e2e8f0;
+      opacity: 1;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 13.5px;
+      color: #334155;
+    }
+
+    select,
+    input[type="text"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      background: #fff;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+
+    /* Email field group layout */
+    .email-field-group {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    textarea {
+      flex: 1;
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-sizing: border-box;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .checkbox-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      margin-top: 0;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .checkbox-container:hover {
+      background: #f1f5f9;
+    }
+
+    .checkbox-container.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background: #f1f5f9;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 6px;
+      cursor: pointer;
+      accent-color: var(--brand);
+    }
+
+    .checkbox-container input[type="checkbox"]:disabled {
+      cursor: not-allowed;
+    }
+
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button#saveBtn {
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 28px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(180, 51, 51, 0.25);
+      transition:
+        background 0.2s,
+        transform 0.1s;
+    }
+
+    button#saveBtn:hover {
+      background: var(--brand-hover);
+      opacity: 1;
+    }
+
+    button#saveBtn:active {
+      transform: scale(0.98);
+    }
+
+    #message {
+      margin-top: 20px;
+    }
+
+    .status {
+      margin-top: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #059669;
+    }
+
+    .alert-success {
+      background: #f0fdf4;
+      color: #166534;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #bbf7d0;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-error {
+      background: #fef2f2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #fecaca;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-left">
+      <img src="image.png" class="logo" alt="Logo" />
+      <div class="title">AGNE Customer Email Maintenance</div>
+    </div>
+    <a href="/logout" class="logout-btn"><i class="fa fa-sign-out-alt"></i></a>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>Customer Email Profile</h2>
+        <button type="button" class="refresh-btn" onclick="refreshPage()">
+          <i class="fa fa-rotate"></i> Refresh
+        </button>
+      </div>
+
+      <label>Customer Number</label>
+      <input type="text" id="customerSearch" list="customerList" placeholder="Type or search Customer Number / Name..."
+        autocomplete="off" />
+      <datalist id="customerList"></datalist>
+
+      <input type="hidden" id="customerNo" />
+
+      <label>Customer Name</label>
+      <input type="text" id="customerName" readonly placeholder="Auto-populated customer name" />
+
+      <div id="customerStatus" class="status"></div>
+
+      <label>Store Owner Email(s)</label>
+      <div class="email-field-group">
+        <textarea id="storeOwnerEmails" rows="2" placeholder="owner@domain.com"></textarea>
+        <label class="checkbox-container">
+          Active/Inactive
+          <input type="checkbox" id="sendStoreOwner" />
+        </label>
+      </div>
+
+      <label>Store Manager Email(s)</label>
+      <div class="email-field-group">
+        <textarea id="storeManagerEmails" rows="2" placeholder="manager@domain.com"></textarea>
+        <label class="checkbox-container">
+          Active/Inactive
+          <input type="checkbox" id="sendStoreManager" />
+        </label>
+      </div>
+
+      <label>Receiver Email(s)</label>
+      <div class="email-field-group">
+        <textarea id="receiverEmails" rows="2" placeholder="receiver@domain.com"></textarea>
+        <label class="checkbox-container">
+          Active/Inactive
+          <input type="checkbox" id="sendReceiver" />
+        </label>
+      </div>
+
+      <label>Inventory Manager Email(s)</label>
+      <div class="email-field-group">
+        <textarea id="inventoryEmails" rows="2" placeholder="inventory@domain.com"></textarea>
+        <label class="checkbox-container">
+          Active/Inactive
+          <input type="checkbox" id="sendInventory" />
+        </label>
+      </div>
+
+      <label>Other Email(s)</label>
+      <div class="email-field-group">
+        <textarea id="otherEmails" rows="2" placeholder="other@domain.com"></textarea>
+        <label class="checkbox-container">
+          Active/Inactive
+          <input type="checkbox" id="sendOther" />
+        </label>
+      </div>
+
+      <label>Notes</label>
+      <textarea id="notes" rows="2" placeholder="Add any special instructions or remarks here..."></textarea>
+
+      <div class="actions">
+        <button id="saveBtn" onclick="saveCustomer()">Save Changes</button>
+      </div>
+
+      <div id="message"></div>
+    </div>
+  </div>
+  
+  <script>
+    async function authFetch(url, options = {}) {
+      const response = await fetch(url, options);
+
+      if (response.status === 401) {
+        const data = await response.json();
+        if (data.redirect) {
+          window.location.href = data.redirect;
+          return null;
+        }
+      }
+      return response;
+    }
+
+    function isValidEmail(email) {
+      if (!email || email.trim() === "") return false;
+      const emailRegex = /^[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/;
+      if (!emailRegex.test(email) || email.includes("..")) return false;
+
+      const parts = email.split("@");
+      if (parts.length !== 2) return false;
+
+      const local = parts[0];
+      const domain = parts[1].toLowerCase();
+      if (local.startsWith(".") || local.endsWith(".") || domain.startsWith(".") || domain.endsWith(".")) {
+        return false;
+      }
+
+      const allowedTlds = ["com", "co.in", "in", "net", "org", "edu", "biz", "boston", "us", "info", "io", "gov", "coop"];
+      let matched = allowedTlds.some(tld => domain.endsWith("." + tld));
+      return matched;
+    }
+
+    function isValidEmailList(emailString) {
+      if (!emailString || emailString.trim() === "") return { valid: true };
+      const emails = emailString.split(",").map(e => e.trim()).filter(e => e !== "");
+      const invalidEmails = emails.filter(e => !isValidEmail(e));
+      return { valid: invalidEmails.length === 0, invalidEmails };
+    }
+
+    function showFieldError(fieldId, message) {
+      const field = document.getElementById(fieldId);
+      field.style.border = "2px solid #ef4444";
+
+      let errorDiv = document.getElementById(fieldId + "Error");
+      if (!errorDiv) {
+        errorDiv = document.createElement("div");
+        errorDiv.id = fieldId + "Error";
+        errorDiv.style.color = "#ef4444";
+        errorDiv.style.fontSize = "12px";
+        errorDiv.style.marginTop = "4px";
+        field.parentNode.insertBefore(errorDiv, field.nextSibling);
+      }
+      errorDiv.innerHTML = message;
+    }
+
+    function clearFieldError(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.style.border = "1px solid var(--border)";
+      const errorDiv = document.getElementById(fieldId + "Error");
+      if (errorDiv) errorDiv.remove();
+    }
+
+    function validateField(fieldId) {
+      const value = document.getElementById(fieldId).value;
+      clearFieldError(fieldId);
+      const result = isValidEmailList(value);
+      if (!result.valid) {
+        showFieldError(fieldId, `Invalid email(s): ${result.invalidEmails.join(", ")}`);
+        return false;
+      }
+      return true;
+    }
+
+    const emailFieldsConfig = [
+      { textId: "storeOwnerEmails", checkId: "sendStoreOwner" },
+      { textId: "storeManagerEmails", checkId: "sendStoreManager" },
+      { textId: "receiverEmails", checkId: "sendReceiver" },
+      { textId: "inventoryEmails", checkId: "sendInventory" },
+      { textId: "otherEmails", checkId: "sendOther" }
+    ];
+
+    function handleEmailInput(textareaId, checkboxId) {
+      const textarea = document.getElementById(textareaId);
+      const checkboxContainer = textarea.nextElementSibling;
+      const checkbox = document.getElementById(checkboxId);
+      
+      const value = textarea.value.trim();
+
+      if (value === "") {
+        checkbox.checked = false;
+        checkbox.disabled = true;
+        checkboxContainer.classList.add("disabled");
+        showFieldError(textareaId, "Please enter email(s) first.");
+      } else {
+        checkbox.disabled = false;
+        checkboxContainer.classList.remove("disabled");
+        clearFieldError(textareaId);
+        validateField(textareaId);
+      }
+    }
+
+    function updateAllFieldsState() {
+      emailFieldsConfig.forEach(field => {
+        handleEmailInput(field.textId, field.checkId);
+      });
+    }
+
+    function refreshPage() {
+      document.getElementById("message").innerHTML = "";
+      window.location.reload(true);
+    }
+
+    let customersData = [];
+
+    async function loadCustomers() {
+      try {
+        const response = await authFetch("/api/customers");
+        const customers = await response.json();
+        customersData = customers;
+
+        const datalist = document.getElementById("customerList");
+        datalist.innerHTML = "";
+
+        customers.forEach((customer) => {
+          const option = document.createElement("option");
+          option.value = customer.CUSTNO + " - " + customer.CUSTNAME;
+          datalist.appendChild(option);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      updateAllFieldsState();
+    }
+
+    document.getElementById("customerSearch").addEventListener("change", async function () {
+      const searchValue = this.value.trim();
+
+      let selectedCustomer = customersData.find(
+        (c) => (c.CUSTNO + " - " + c.CUSTNAME).toLowerCase() === searchValue.toLowerCase()
+      );
+
+      if (!selectedCustomer) {
+        selectedCustomer = customersData.find(
+          (c) => c.CUSTNO.toLowerCase() === searchValue.toLowerCase() || c.CUSTNAME.toLowerCase() === searchValue.toLowerCase()
+        );
+      }
+
+      const custNo = selectedCustomer ? selectedCustomer.CUSTNO : searchValue;
+      document.getElementById("customerNo").value = custNo;
+
+      if (!custNo) {
+        emailFieldsConfig.forEach(field => {
+          document.getElementById(field.textId).value = "";
+          document.getElementById(field.checkId).checked = false;
+        });
+        document.getElementById("customerName").value = "";
+        document.getElementById("notes").value = "";
+        document.getElementById("customerStatus").innerHTML = "";
+        document.getElementById("saveBtn").innerText = "Save Changes";
+        updateAllFieldsState();
+        return;
+      }
+
+      try {
+        const response = await authFetch(`/api/customer/${custNo}`);
+        const result = await response.json();
+        const data = result.data || {};
+
+        document.getElementById("customerName").value = data.CUST_NAME || data.CUSTNAME || "";
+
+        if (result.exists) {
+          document.getElementById("storeOwnerEmails").value = data.OWNR_MAIL || "";
+          document.getElementById("storeManagerEmails").value = data.MNGR_MAIL || "";
+          document.getElementById("receiverEmails").value = data.REC_MAIL || "";
+          document.getElementById("inventoryEmails").value = data.INVM_MAIL || "";
+          document.getElementById("otherEmails").value = data.OTH_MAIL || "";
+          document.getElementById("notes").value = data.NOTES || "";
+
+          document.getElementById("sendStoreOwner").checked = data.OWNR_MAIL_SEND === "Y";
+          document.getElementById("sendStoreManager").checked = data.MNGR_MAIL_SEND === "Y";
+          document.getElementById("sendReceiver").checked = data.REC_MAIL_SEND === "Y";
+          document.getElementById("sendInventory").checked = data.INVM_MAIL_SEND === "Y";
+          document.getElementById("sendOther").checked = data.OTH_MAIL_SEND === "Y";
+
+          document.getElementById("customerStatus").innerHTML = '<i class="fa fa-check-circle"></i> Customer found. Existing details loaded.';
+          document.getElementById("saveBtn").innerText = "Update Changes";
+        } else {
+          emailFieldsConfig.forEach(field => {
+            document.getElementById(field.textId).value = "";
+            document.getElementById(field.checkId).checked = false;
+          });
+          document.getElementById("notes").value = "";
+
+          document.getElementById("customerStatus").innerHTML = '<i class="fa fa-info-circle"></i> Customer Found.';
+          document.getElementById("saveBtn").innerText = "Save Changes";
+        }
+        updateAllFieldsState();
+      } catch (error) {
+        console.log(error);
+        document.getElementById("customerStatus").innerHTML = "Error loading customer data.";
+      }
+    });
+
+    async function saveCustomer() {
+      const customerNo = document.getElementById("customerNo").value.trim();
+
+      if (!customerNo) {
+        document.getElementById("message").innerHTML = `
+          <div class="alert-error"><i class="fa fa-triangle-exclamation"></i> Please select a customer first.</div>`;
+        return;
+      }
+
+      emailFieldsConfig.forEach(f => clearFieldError(f.textId));
+
+      let hasError = false;
+      emailFieldsConfig.forEach((field) => {
+        const value = document.getElementById(field.textId).value;
+        const result = isValidEmailList(value);
+        if (!result.valid) {
+          hasError = true;
+          showFieldError(field.textId, `Invalid email(s): ${result.invalidEmails.join(", ")}`);
+        }
+      });
+
+      if (hasError) {
+        document.getElementById("message").innerHTML = `
+          <div class="alert-error"><i class="fa fa-triangle-exclamation"></i> Please correct the highlighted email addresses.</div>`;
+        return;
+      }
+
+      const payload = {
+        custNo: customerNo,
+        custName: document.getElementById("customerName").value,
+
+        ownrMail: document.getElementById("storeOwnerEmails").value,
+        ownrMailSend: document.getElementById("sendStoreOwner").checked,
+
+        mngrMail: document.getElementById("storeManagerEmails").value,
+        mngrMailSend: document.getElementById("sendStoreManager").checked,
+
+        recMail: document.getElementById("receiverEmails").value,
+        recMailSend: document.getElementById("sendReceiver").checked,
+
+        invmMail: document.getElementById("inventoryEmails").value,
+        invmMailSend: document.getElementById("sendInventory").checked,
+
+        othMail: document.getElementById("otherEmails").value,
+        othMailSend: document.getElementById("sendOther").checked,
+
+        notes: document.getElementById("notes").value
+      };
+
+      try {
+        const response = await authFetch("/api/customer/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          document.getElementById("message").innerHTML = `
+            <div class="alert-error"><i class="fa fa-triangle-exclamation"></i> ${result.message}</div>`;
+          return;
+        }
+
+        document.getElementById("message").innerHTML = `
+          <div class="alert-success"><i class="fa fa-check-circle"></i> ${result.message}</div>`;
+      } catch (error) {
+        console.log(error);
+        document.getElementById("message").innerHTML = `
+          <div class="alert-error"><i class="fa fa-triangle-exclamation"></i> Error while saving data.</div>`;
+      }
+    }
+
+    emailFieldsConfig.forEach(field => {
+      const textarea = document.getElementById(field.textId);
+      textarea.addEventListener("input", () => handleEmailInput(field.textId, field.checkId));
+      textarea.addEventListener("blur", () => handleEmailInput(field.textId, field.checkId));
+    });
+
+    window.onload = loadCustomers;
+  </script>
+</body>
+
+</html>
